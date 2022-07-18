@@ -6,7 +6,7 @@
       </router-link>
       <router-link v-bind:to="routes.home">Home</router-link>
       <span> - </span>
-      <span v-if="isLoggedIn">
+      <span v-if="isSignedIn">
         <button @click="signOut">Sign out</button>
       </span>
       <span v-else>
@@ -21,16 +21,16 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { routes } from "./router";
-import firebase from 'firebase/app';
-import 'firebase/auth';
+import { routes } from "@/router";
+import firebase from "@/facades/FirebaseFacade";
+import { getAuth, User } from "firebase/auth";
 
-const isLoggedIn = ref(false);
+const isSignedIn = ref(false);
 
 const router = useRouter();
 
 router.beforeEach((to, from, next) => {
-  if (isLoggedIn.value) {
+  if (isSignedIn.value) {
     return next(true);
   }
   if (to.path === routes.login) {
@@ -42,15 +42,15 @@ router.beforeEach((to, from, next) => {
   next(false);
 });
 
-firebase.auth().onAuthStateChanged(function(user) {
-  isLoggedIn.value = !!user;
-  if (!isLoggedIn.value) {
+getAuth().onAuthStateChanged(function(user: User | null) {
+  isSignedIn.value = !!user;
+  if (!isSignedIn.value) {
     router.push(routes.login);
   }
 });
 
-const signOut = () => {
-  firebase.auth().signOut();
+const signOut = async () => {
+  await firebase.signOut();
   router.push(routes.login);
 };
 </script>

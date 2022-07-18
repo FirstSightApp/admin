@@ -5,7 +5,7 @@
 class Env {
   // @ts-ignore Vite env
   mode = import.meta.env.MODE;
-  
+
   variables = {
     apiKeyName: "API_KEY",
     projectIdName: "PROJECT_ID",

@@ -7,13 +7,13 @@
     "deploy": "npm run build && firebase deploy --only hosting"
   },
   "dependencies": {
-    "firebase": "^8.6.5",
-    "vue": "^3.0.5",
-    "vue-router": "^4.0.8"
+    "firebase": "^9.9.0",
+    "vue": "^3.2.37",
+    "vue-router": "^4.1.2"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^1.2.3",
-    "@vue/compiler-sfc": "^3.0.5",
-    "vite": "^2.3.5"
+    "@vitejs/plugin-vue": "^3.0.1",
+    "@vue/compiler-sfc": "^3.2.37",
+    "vite": "^3.0.1"
   }
 }

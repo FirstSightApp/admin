@@ -5,7 +5,7 @@
       <p><input type="text" placeholder="Email" v-model="email" /></p>
       <p><input type="password" placeholder="Password" v-model="password" /></p>
       <p v-if="error">{{ error }}</p>
-      <p><button @click="logIn">Submit</button></p>
+      <p><button @click="signIn">Submit</button></p>
     </div>
   </div>
 </template>
@@ -14,9 +14,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { routes } from "../router";
-import firebase from 'firebase/app';
-import 'firebase/auth';
+import { routes } from "@/router";
+import firebase from "@/facades/FirebaseFacade";
+import { User } from "@/models";
+import { Err } from "@/Err";
 
 const email = ref("");
 const password = ref("");
@@ -24,29 +25,17 @@ const error = ref<string>();
 
 const router = useRouter();
 
-const logIn = () => {
-  firebase
-    .auth()
-    .signInWithEmailAndPassword(email.value, password.value)
-    .then((data) => {
-      router.push(routes.home);
-    })
-    .catch(error => {
-      switch (error.code) {
-        case "auth/invalid-email":
-          error.value = "Invalid email";
-          break;
-        case "auth/user-not-found":
-          error.value = "No account with that email was found";
-          break;
-        case "auth/wrong-password":
-          error.value = "Incorrect password";
-          break;
-        default:
-          error.value = "Email or password was incorrect";
-          break;
-      };
-    });
+let user: User | undefined;
+
+const signIn = async () => {
+  const userOrError = await firebase.signIn(email.value, password.value);
+  if (userOrError instanceof Err) {
+    error.value = userOrError.format();
+  }
+  else {
+    user = userOrError;
+  }
+  router.push(routes.home);
 }
 </script>
 
