@@ -1,19 +1,6 @@
 <template>
   <div>
-    <nav>
-      <router-link v-bind:to="routes.home">
-        <img src="./assets/logo.png" width="36" height="36" />
-      </router-link>
-      <router-link v-bind:to="routes.home">Home</router-link>
-      <span> - </span>
-      <span v-if="isSignedIn">
-        <button @click="signOut">Sign out</button>
-      </span>
-      <span v-else>
-        <router-link v-bind:to="routes.login">Sign in</router-link>
-      </span>
-    </nav>
-    <router-view />
+    <Layout />
   </div>
 </template>
 
@@ -22,12 +9,11 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { routes } from "@/router";
-import firebase from "@/facades/FirebaseFacade";
+import Layout from '@/pages/Layout.vue';
 import { getAuth, User } from "firebase/auth";
 
-const isSignedIn = ref(false);
-
 const router = useRouter();
+const isSignedIn = ref(false);
 
 router.beforeEach((to, from, next) => {
   if (isSignedIn.value) {
@@ -49,10 +35,6 @@ getAuth().onAuthStateChanged(function(user: User | null) {
   }
 });
 
-const signOut = async () => {
-  await firebase.signOut();
-  router.push(routes.login);
-};
 </script>
 
 
@@ -60,7 +42,7 @@ const signOut = async () => {
 #app {
   min-height: 100%;
   background-color: whitesmoke;
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Roboto, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

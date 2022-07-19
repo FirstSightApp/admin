@@ -1,6 +1,7 @@
-import { defineConfig, loadEnv } from "vite"
-import { resolve } from "path"
-import vue from "@vitejs/plugin-vue"
+import { defineConfig, loadEnv } from "vite";
+import { resolve } from "path";
+import vue from "@vitejs/plugin-vue";
+//import { quasar, transformAssetUrls } from "@quasar/vite-plugin";
 
 export default ({ mode }) => {
     const env = loadEnv(mode, process.cwd(), "");
@@ -12,7 +13,12 @@ export default ({ mode }) => {
           "@": resolve(__dirname, "src"),
         },
       },
-      plugins: [vue()],
+      plugins: [
+        vue(),
+        //quasar({
+        //  sassVariables: 'src/quasar-variables.sass'
+        //})
+      ],
       define: {
         globalEnv: env,
       },
