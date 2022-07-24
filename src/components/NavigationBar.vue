@@ -1,10 +1,10 @@
 <template>
-  <q-list bordered separator>
+  <q-list separator>
 
     <q-item
       clickable v-ripple
-      @click="$router.push(routes.home)"
-      :active="$router.currentRoute.value.path === routes.home"
+      @click="routeActions.navigate(routes.dashboard)"
+      :active="routeState.context.endpoint === routes.home || routeState.context.endpoint === routes.dashboard"
       active-class="bg-teal-2 text-grey-8">
       <q-item-section avatar>
         <q-icon name="dashboard" />
@@ -14,8 +14,8 @@
 
     <q-item
       clickable v-ripple
-      @click="$router.push(routes.users)"
-      :active="$router.currentRoute.value.path === routes.users"
+      @click="routeActions.navigate(routes.users)"
+      :active="routeState.context.endpoint === routes.users"
       active-class="bg-teal-2 text-grey-8">
       <q-item-section avatar>
         <q-icon name="people" />
@@ -25,8 +25,8 @@
 
     <q-item
       clickable v-ripple
-      @click="$router.push(routes.reports)"
-      :active="$router.currentRoute.value.path === routes.reports"
+      @click="routeActions.navigate(routes.reports)"
+      :active="routeState.context.endpoint === routes.reports"
       active-class="bg-teal-1 text-grey-8">
       <q-item-section avatar>
         <q-icon name="outlined_flag" />
@@ -38,5 +38,12 @@
 </template>
 
 <script setup lang="ts">
-import { routes } from '@/router';
+import { routes } from "@/router";
+import useRoute from "@/states/route";
+
+const {
+  routeState,
+  routeActions,
+} = useRoute();
+
 </script>

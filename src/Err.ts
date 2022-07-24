@@ -11,5 +11,5 @@ export class Err {
   format = (): string => {
     const code = this.code ? `${this.code} :`: "";
     return code + this.message;
-  }
+  };
 }

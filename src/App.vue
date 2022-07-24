@@ -1,40 +1,43 @@
 <template>
-  <div>
+  <div v-if="isInitialized">
     <Layout />
   </div>
 </template>
 
 
 <script setup lang="ts">
+import Layout from "@/pages/Layout.vue";
 import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { routes } from "@/router";
-import Layout from '@/pages/Layout.vue';
-import { getAuth, User } from "firebase/auth";
+import firebase from "@/facades/firebase";
+import viewService from "@/services/ViewService";
+import useRoute from "@/states/route";
+import useAuth from "@/states/auth";
 
-const router = useRouter();
-const isSignedIn = ref(false);
+const {
+  authState,
+  authActions,
+} = useAuth();
 
-router.beforeEach((to, from, next) => {
-  if (isSignedIn.value) {
-    return next(true);
+const {
+  routeState,
+  routeActions,
+} = useRoute();
+
+const isInitialized = ref(false);
+
+firebase.auth.onAuthStateChanged((user) => {
+  if (isInitialized.value) {
+    return;
   }
-  if (to.path === routes.login) {
-    return next(true);
-  }
-  if (from.path !== routes.login) {
-    return next(routes.login);
-  }
-  next(false);
+
+  // Refresh auth machine first (might start a navigation).
+  authActions.refresh();
+
+  // "init" route machine with current route.
+  const endpoint = viewService.getRoute();
+  routeActions.navigate(endpoint);
+  isInitialized.value = true;
 });
-
-getAuth().onAuthStateChanged(function(user: User | null) {
-  isSignedIn.value = !!user;
-  if (!isSignedIn.value) {
-    router.push(routes.login);
-  }
-});
-
 </script>
 
 

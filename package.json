@@ -8,10 +8,12 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.14.3",
+    "@xstate/vue": "^2.0.0",
     "firebase": "^9.9.0",
     "quasar": "^2.7.5",
     "vue": "^3.2.37",
-    "vue-router": "^4.1.2"
+    "vue-router": "^4.1.2",
+    "xstate": "^4.32.1"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.0.1",

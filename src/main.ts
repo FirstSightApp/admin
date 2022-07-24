@@ -1,14 +1,15 @@
+// Init facades.
+import "@/facades/firebase";
+
+// Import UI.
+import { router } from "@/router";
 import { createApp } from "vue";
 import App from "@/App.vue";
-import { router } from "@/router";
-import "@/facades/FirebaseFacade";
 import { Quasar } from "quasar";
 
-// Import icon libraries.
+// Icon libraries and Quasar css.
 import "@quasar/extras/roboto-font/roboto-font.css";
 import "@quasar/extras/material-icons/material-icons.css";
-
-// Import Quasar css.
 import "quasar/src/css/index.sass"
 
 const app = createApp(App);

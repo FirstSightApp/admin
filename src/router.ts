@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-export const routes = {
+const routes = {
   home: "/",
   login: "/login",
   dashboard: "/dashboard",
@@ -8,16 +8,16 @@ export const routes = {
   reports: "/reports",
 };
 
-export const router = createRouter({
+const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-        path: routes.home,
-        component: () => import("./pages/Dashboard.vue"),
-    },
-    {
         path: routes.login,
         component: () => import("./pages/LogIn.vue"),
+    },
+    {
+        path: routes.home,
+        component: () => import("./pages/Dashboard.vue"),
     },
     {
         path: routes.dashboard,
@@ -33,3 +33,14 @@ export const router = createRouter({
     },
   ],
 });
+
+//router.beforeEach((to, from, next) => {
+//  console.log("router.beforeEach");
+//  console.log(to);
+//  next();
+//});
+
+export {
+  routes,
+  router,
+};

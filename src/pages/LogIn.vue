@@ -64,29 +64,19 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { routes } from "@/router";
-import firebase from "@/facades/FirebaseFacade";
-import { User } from "@/models";
-import { Err } from "@/Err";
+import useAuth from "@/states/auth";
 
-const router = useRouter();
+const {
+  authState,
+  authActions,
+} = useAuth();
 
 const email = ref("");
 const password = ref("");
 const error = ref<string>();
 
-let user: User | undefined;
-
 const onSubmit = async () => {
-  const userOrError = await firebase.signIn(email.value, password.value);
-  if (userOrError instanceof Err) {
-    error.value = userOrError.format();
-  }
-  else {
-    user = userOrError;
-  }
-  router.push(routes.home);
+  authActions.login(email.value, password.value);
 };
 
 const onReset = () => {

@@ -5,7 +5,7 @@
       <q-toolbar>
         <q-btn
           @click="toggleLeftDrawer"
-          v-if="isSignedIn"
+          v-if="authState.matches('authenticated')"
           dense flat round
           icon="menu" />
 
@@ -16,10 +16,10 @@
           Admin - FirstSight
         </q-toolbar-title>
 
-        <span v-if="isSignedIn">
-          <q-btn-dropdown stretch flat :label="`${email}`">
+        <span v-if="authState.matches('authenticated')">
+          <q-btn-dropdown stretch flat :label="`${authState.context.user?.email}`">
             <q-list>
-              <q-item clickable v-ripple @click="signOut">
+              <q-item clickable v-ripple @click="authActions.logout()">
                 <q-item-section avatar>
                   <q-icon name="logout" />
                 </q-item-section>
@@ -29,20 +29,19 @@
           </q-btn-dropdown>
         </span>
         <span v-else>
-          <router-link v-bind:to="routes.login">
-            <q-btn
-              color="white"
-              text-color="black">
-              Sign in
-            </q-btn>
-          </router-link>
+          <q-btn
+            @click="routeActions.navigate(routes.login)"
+            color="white"
+            text-color="black">
+            Sign in
+          </q-btn>
         </span>
 
       </q-toolbar>
     </q-header>
 
     <q-drawer
-      v-if="isSignedIn"
+      v-if="authState.matches('authenticated')"
       show-if-above
       v-model="leftDrawerOpen"
       side="left"
@@ -61,42 +60,23 @@
 <script setup lang="ts">
 import NavigationBar from '@/components/NavigationBar.vue';
 import { ref } from "vue";
-import { getAuth, User } from "firebase/auth";
-import { useRouter } from "vue-router";
-import firebase from "@/facades/FirebaseFacade";
 import { routes } from '@/router';
+import useAuth from "@/states/auth";
+import useRoute from "@/states/route";
 
-const router = useRouter();
-const isSignedIn = ref(false);
+const {
+  authState,
+  authActions,
+} = useAuth();
+
+const {
+  routeState,
+  routeActions,
+} = useRoute();
+
 const leftDrawerOpen = ref(false);
-const email = ref("");
-
-getAuth().onAuthStateChanged(function(user: User | null) {
-  isSignedIn.value = !!user;
-  if (!isSignedIn.value) {
-    router.push(routes.login);
-  }
-  else {
-    email.value = user!.email!;
-  }
-});
-
-const signOut = async () => {
-  await firebase.signOut();
-  router.push(routes.login);
-};
 
 const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value
-}
-</script>
-
-<script module lang="ts">
-export default {
-  setup () {
-    return {
-      leftDrawerOpen,
-    }
-  }
 }
 </script>
