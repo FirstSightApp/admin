@@ -44,7 +44,7 @@ interface NavigatedEvent extends RouteEvent {
 
 const machine = createMachine(
   {
-    id: "context",
+    id: "route",
     schema: {
       context: {} as RouteContext,
       events: {} as RouteEvent,

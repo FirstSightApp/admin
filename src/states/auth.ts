@@ -68,7 +68,7 @@ interface ErrEvent extends EventObject {
 
 const machine = createMachine(
   {
-    id: "context",
+    id: "auth",
     schema: {
       context: {} as AuthContext,
       events: {} as AuthEvent,

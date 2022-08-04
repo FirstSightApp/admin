@@ -6,6 +6,10 @@ import {
   Auth,
   getAuth,
 } from "firebase/auth";
+import {
+  getFirestore,
+  collection,
+} from "firebase/firestore";
 import env from "../env";
 
 const firebaseConfig = {
@@ -19,10 +23,18 @@ const firebaseConfig = {
 
 const app: FirebaseApp = initializeApp(firebaseConfig);
 const auth: Auth = getAuth(app);
+const firestore = getFirestore(app);
 
 const firebase = {
   app,
   auth,
+  collections: {
+    system: () => collection(firestore, "System"),
+    profiles: () => collection(firestore, "Profiles"),
+    pictures: () => collection(firestore, "Pictures"),
+    criteriaScores: () => collection(firestore, "CriteriaScores"),
+    reports: () => collection(firestore, "Reports"),
+  },
 }
 
 export default firebase;
