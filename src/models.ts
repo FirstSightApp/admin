@@ -210,6 +210,11 @@ export class Picture {
     this.createdAt = createdAt;
   }
 
+  static empty(
+    ): Picture {
+      return new Picture("", "", "", 0, "", "", new Date());
+    }
+  
   /**
    * From map constructor.
    * @param {string} id Model ID.
@@ -456,6 +461,11 @@ export class Report {
     this.targetPictureId = targetPictureId;
     this.reportReasons = reportReasons;
     this.createdAt = createdAt;
+  }
+
+  static empty(
+  ): Report {
+    return new Report("", "", "", "", "", "", [], new Date());
   }
 
   /**

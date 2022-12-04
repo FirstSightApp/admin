@@ -1,7 +1,7 @@
 import { createMachine, EventObject, interpret } from "xstate";
 import { useActor } from "@xstate/vue";
 import { assign } from "xstate/lib/actions";
-import { Profile, User } from "@/models";
+import { Profile, Report, User } from "@/models";
 import { Err } from "@/Err";
 import profileService from "@/services/ProfileService";
 import viewService from "@/services/ViewService";
@@ -24,18 +24,18 @@ const actions = {
   assignLoaded: "assignInit",
 };
 
-export interface ProfilesContext {
-  profiles: Profile[] | null;
+export interface ReportsContext {
+  reports: Report[] | null;
 }
 
-interface ProfilesEvent extends EventObject {
+interface ReportsEvent extends EventObject {
 }
 
-interface LoadedEvent extends ProfilesEvent {
-  data: Profile[];
+interface LoadedEvent extends ReportsEvent {
+  data: Report[];
 }
 
-interface ErrEvent extends ProfilesEvent {
+interface ErrEvent extends ReportsEvent {
   data: Err;
 }
 
@@ -43,11 +43,11 @@ const machine = createMachine(
   {
     id: "profiles",
     schema: {
-      context: {} as ProfilesContext,
-      events: {} as ProfilesEvent,
+      context: {} as ReportsContext,
+      events: {} as ReportsEvent,
     },
-    context: <ProfilesContext>{
-      profiles: null,
+    context: <ReportsContext>{
+      reports: null,
     },
     initial: states.idle,
     states: {
@@ -80,17 +80,17 @@ const machine = createMachine(
     guards: {
     },
     actions: {
-      [actions.notifyError]: (_context: ProfilesContext, event: ErrEvent) =>
+      [actions.notifyError]: (_context: ReportsContext, event: ErrEvent) =>
         viewService.notify(event.data.format()),
 
-      [actions.assignLoaded]: assign((_context, event: LoadedEvent) => <ProfilesContext>{
-        profiles: event.data,
+      [actions.assignLoaded]: assign((_context, event: LoadedEvent) => <ReportsContext>{
+        reports: event.data,
       }),
     },
     services: {
-      [services.load]: async (_context: ProfilesContext, event: LoadedEvent) => {
-        const profiles = await profileService.getProfiles();
-        return profiles;
+      [services.load]: async (_context: ReportsContext, event: LoadedEvent) => {
+        const reports = await profileService.getReports();
+        return reports;
       },
     },
   },
@@ -105,10 +105,10 @@ const use = () => {
   } = useActor(service);
 
   return {
-    profilesState: state,
-    profilesActions: {
+    reportsState: state,
+    reportsActions: {
       refresh: (force = false) => {
-        if (!force && state.value.context.profiles) {
+        if (!force && state.value.context.reports) {
           return;
         }
         service.send(events.refresh);

@@ -19,7 +19,7 @@
       <div>Loading...</div>
     </div>
     <div v-else-if="!profilesState.context.profiles">
-      <div>No profiles.</div>
+      <div>No data.</div>
     </div>
     <div v-else>
       <q-table
